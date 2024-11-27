@@ -2,41 +2,30 @@ import pandas as pd
 
 import panel as pn # import panel for ui purposes
 
+# load in all the java extensions etc for the panel server
+pn.extension()
 
+dataframe_filepath = "~/Downloads/f07bce4f-b08c-fe92-6505-c9e534d89a09--v1--full.csv"
 
-def display_alert_panel(alert_string):
-    pn.pane.Alert(alert_string).servable()
-    return
+pn.pane.Alert("render of representation of the dataframe").servable()
+pn.pane.Alert("current pandas version " + pd.__version__).servable()
 
-def display_dataframe(pandas_dataframe):
-    pn.pane.DataFrame(pandas_dataframe).servable()
-    return
 
 
 def read_dataframe(dataframe_filepath):
-    dataframe = pd.read_csv(dataframe_filepath, low_memory=False)
-    return dataframe
+    df = pd.read_csv(dataframe_filepath, low_memory=False)
+    return df
 
-def main():
+# read dataframe
+df = read_dataframe(dataframe_filepath)
 
-    # load in all the java extensions etc for the panel server
-    pn.extension()
-    dataframe_filepath = "~/Downloads/open-context-24296-records(1).csv"
-    dataframe = read_dataframe(dataframe_filepath)
-    display_alert_panel("This is a redner of my dataframe in panel")
+# display dataframe
+pn.pane.DataFrame(df.head()).servable()
 
-    display_dataframe(dataframe)
-
-    return
-
-if __name__ == "__main__":
-    main()
-
-
-# test
-# pn.indicators.Number(
-#     name="Wind Speed",
-#     value=8.6,
-#     format="{value} non nan",
-#     colors=[(10, "green"), (100, "red")],
-# ).servable()
+#special indicators with dif numbers based on amount
+pn.indicators.Number(
+    name="Wind Speed",
+    value=8.6,
+    format="{value} beh",
+    colors=[(10, "green"), (100, "red")],
+).servable()
