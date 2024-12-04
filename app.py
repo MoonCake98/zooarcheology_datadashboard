@@ -11,11 +11,6 @@ pn.extension()
 pan2 = pn.pane.Alert("current pandas version " + pd.__version__)
 pan1 = pn.pane.Alert("render of representation of the dataframe")
 
-# stack the 2 alrt pain objects in a column
-alert_col = pn.Column(pan1,pan2)
-alert_col.servable()
-
-
 # define data file path
 dataframe_filepath = "~/Downloads/f07bce4f-b08c-fe92-6505-c9e534d89a09--v1--full.csv"
 
@@ -29,9 +24,11 @@ def read_dataframe(df_filepath):
 df = read_dataframe(dataframe_filepath)
 
 # select head and collumns with variables of interest of the dataframe to avoid visual clutter and display this
-pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].head()).servable()
+df_display_head_panel = pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].head())
 
 # filter the df for unique coordinates of the dataset and display this
-pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates())).servable()
+df_unique_coordinates = pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates()))
 
-
+# put the 2 dataframes on a single row
+df_row = pn.Row(df_display_head_panel,df_unique_coordinates)
+full_page_collumn = pn.Column(pan1,pan2,df_row).servable()
