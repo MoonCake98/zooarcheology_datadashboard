@@ -1,6 +1,7 @@
 import pandas as pd # import pandas for data handling purposes
 
 import panel as pn # import panel for ui purposes
+# panel run command panel serve app.py --dev
 
 
 # load in all the java extensions etc for the panel server
@@ -27,14 +28,7 @@ def read_dataframe(df_filepath):
 # read dataframe
 df = read_dataframe(dataframe_filepath)
 
-#select collumns with variables of interest of the dataframe to avoid visual clutter
-display_df = df[df.columns[[1,2,4,6,7,8,26,27]]]
-
-df_pane = pn.pane.DataFrame(display_df.head())
-
-df_pane.servable()
+#select head and collumns with variables of interest of the dataframe to avoid visual clutter and display this
+pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].head()).servable()
 
 
-
-# display head of dataframe to get a visualisation of the dataframe
-df_pane = pn.pane.DataFrame(display_df.head())
