@@ -8,8 +8,8 @@ import panel as pn # import panel for ui purposes
 pn.extension()
 
 # make 2 alert pane objects 
-pan2 = pn.pane.Alert("current pandas version " + pd.__version__)
-pan1 = pn.pane.Alert("render of representation of the dataframe")
+alert_panel_pandasversion = pn.pane.Alert("current pandas version " + pd.__version__)
+alert_panel_text_page1 = pn.pane.Alert("representation of the dataframe")
 
 # define data file path
 dataframe_filepath = "~/Downloads/f07bce4f-b08c-fe92-6505-c9e534d89a09--v1--full.csv"
@@ -31,4 +31,21 @@ df_unique_coordinates = pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].dr
 
 # put the 2 dataframes on a single row
 df_row = pn.Row(df_display_head_panel,df_unique_coordinates)
-full_page_collumn = pn.Column(pan1,pan2,df_row).servable()
+
+# put the contents of the above elemnts into a column to get a single object for the whole first page
+fullpage1_collumn = pn.Column(alert_panel_text_page1,alert_panel_pandasversion,df_row)
+
+# make placeholder alert and markdown title panel for future geographical visualisation
+markdown_panel_title_page2 = pn.pane.Markdown("# future geographical visualisation")
+alert_panel_text_page2 = pn.pane.Alert("this is simply a placeholder, the actual figure has yet to be finished")
+
+# add placeholders together into a column to get a single object for the second page
+fullpage2_collumn = pn.Column(markdown_panel_title_page2, alert_panel_text_page2)
+
+# add tabs so I can seperated the fd representations and the future geographical visualisation
+tabs = pn.Tabs(
+    ("dataframe visualisation", fullpage1_collumn),  # Title and content for each tab
+    ("coordinate grapical representation", fullpage2_collumn)
+)
+
+tabs.servable()
