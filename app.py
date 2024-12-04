@@ -1,7 +1,7 @@
 import pandas as pd # import pandas for data handling purposes
 
 import panel as pn # import panel for ui purposes
-# panel run command panel serve app.py --dev
+# panel run command: panel serve app.py --dev
 
 
 # load in all the java extensions etc for the panel server
@@ -28,7 +28,10 @@ def read_dataframe(df_filepath):
 # read dataframe
 df = read_dataframe(dataframe_filepath)
 
-#select head and collumns with variables of interest of the dataframe to avoid visual clutter and display this
+# select head and collumns with variables of interest of the dataframe to avoid visual clutter and display this
 pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].head()).servable()
+
+# filter the df for unique coordinates of the dataset and display this
+pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates())).servable()
 
 
