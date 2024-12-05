@@ -3,11 +3,13 @@ import pandas as pd # import pandas for data handling purposes
 import panel as pn # import panel for ui purposes
 # panel run command: panel serve app.py --dev
 
+import folium as fl
+
 
 # load in all the java extensions etc for the panel server
 pn.extension()
 
-# make 2 alert pane objects 
+# make 2 alert pane objects
 alert_panel_pandasversion = pn.pane.Alert("current pandas version " + pd.__version__)
 alert_panel_text_page1 = pn.pane.Alert("representation of the dataframe")
 
@@ -29,12 +31,24 @@ df_display_head_panel = pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].he
 # filter the df for unique coordinates of the dataset and display this
 df_unique_coordinates_panel = pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates()))
 
-mean_df = pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates().mean())
+mean_df = pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates().mean()).transpose()
 
-mean_pane = pn.pane.DataFrame(mean_df)
+
+pd.DataFrame({})
+
+mean_panel = pd.DataFrame(mean_df)
+
+
+
+
 
 # put the 2 dataframes on a single row
-df_row = pn.Row(df_display_head_panel,df_unique_coordinates_panel,mean_pane)
+df_row = pn.Row(pn.Column(df_display_head_panel,mean_panel),df_unique_coordinates_panel,mean_panel)
+
+# m = fl.Map(location=[mean_df["Latitude (WGS-84)"], mean_df["Longitude (WGS-84)"]], zoom_start=12)
+
+# folium_pane = pn.pane.plot.Folium(m, height=400)
+
 
 # put the contents of the above elemnts into a column to get a single object for the whole first page
 fullpage1_collumn = pn.Column(alert_panel_text_page1,alert_panel_pandasversion,df_row)
