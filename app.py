@@ -31,23 +31,16 @@ df_display_head_panel = pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].he
 # filter the df for unique coordinates of the dataset and display this
 df_unique_coordinates_panel = pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates()))
 
+# create the mean dataframe and panel
 mean_df = pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates().mean()).transpose()
-
-
-pd.DataFrame({})
-
 mean_panel = pd.DataFrame(mean_df)
 
+# put 3 dataframes into a single row
+df_row = pn.Row(pn.Column(df_display_head_panel,mean_panel),df_unique_coordinates_panel)
 
-
-
-
-# put the 2 dataframes on a single row
-df_row = pn.Row(pn.Column(df_display_head_panel,mean_panel),df_unique_coordinates_panel,mean_panel)
-
-# m = fl.Map(location=[mean_df["Latitude (WGS-84)"], mean_df["Longitude (WGS-84)"]], zoom_start=12)
-
-# folium_pane = pn.pane.plot.Folium(m, height=400)
+# map centered on the mean of all the unique coordinates in the data
+m = fl.Map(location=[mean_df["Latitude (WGS-84)"], mean_df["Longitude (WGS-84)"]], zoom_start=12)
+folium_pane = pn.pane.plot.Folium(m, height=400)
 
 
 # put the contents of the above elemnts into a column to get a single object for the whole first page
@@ -58,7 +51,7 @@ markdown_panel_title_page2 = pn.pane.Markdown("# future geographical visualisati
 alert_panel_text_page2 = pn.pane.Alert("this is simply a placeholder, the actual figure has yet to be finished")
 
 # add placeholders together into a column to get a single object for the second page
-fullpage2_collumn = pn.Column(markdown_panel_title_page2, alert_panel_text_page2)
+fullpage2_collumn = pn.Column(markdown_panel_title_page2, alert_panel_text_page2,folium_pane)
 
 # add tabs so I can seperated the fd representations and the future geographical visualisation
 tabs = pn.Tabs(
