@@ -27,10 +27,14 @@ df = read_dataframe(dataframe_filepath)
 df_display_head_panel = pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].head())
 
 # filter the df for unique coordinates of the dataset and display this
-df_unique_coordinates = pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates()))
+df_unique_coordinates_panel = pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates()))
+
+mean_df = pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates().mean())
+
+mean_pane = pn.pane.DataFrame(mean_df)
 
 # put the 2 dataframes on a single row
-df_row = pn.Row(df_display_head_panel,df_unique_coordinates)
+df_row = pn.Row(df_display_head_panel,df_unique_coordinates_panel,mean_pane)
 
 # put the contents of the above elemnts into a column to get a single object for the whole first page
 fullpage1_collumn = pn.Column(alert_panel_text_page1,alert_panel_pandasversion,df_row)
@@ -47,5 +51,9 @@ tabs = pn.Tabs(
     ("dataframe visualisation", fullpage1_collumn),  # Title and content for each tab
     ("coordinate grapical representation", fullpage2_collumn)
 )
+
+
+
+
 
 tabs.servable()
