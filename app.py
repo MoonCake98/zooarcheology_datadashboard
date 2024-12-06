@@ -29,29 +29,44 @@ df = read_dataframe(dataframe_filepath)
 df_display_head_panel = pn.pane.DataFrame(df[df.columns[[1,2,4,6,7,8,26,27]]].head())
 
 # filter the df for unique coordinates of the dataset and display this
-df_unique_coordinates_panel = pn.pane.DataFrame(pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates()))
+unique_coordinates_df = df[df.columns[[7, 8]]].drop_duplicates()
+df_unique_coordinates_panel = pn.pane.DataFrame(unique_coordinates_df)
 
 # create the mean dataframe and panel
-mean_df = pd.DataFrame(df[df.columns[[7, 8]]].drop_duplicates().mean()).transpose()
-mean_panel = pd.DataFrame(mean_df)
+mean_df = pd.DataFrame(unique_coordinates_df.mean()).transpose()
+
+mean_panel = pn.pane.DataFrame(mean_df)
 
 # put 3 dataframes into a single row
 df_row = pn.Row(pn.Column(df_display_head_panel,mean_panel),df_unique_coordinates_panel)
 
 # map centered on the mean of all the unique coordinates in the data
-m = fl.Map(location=[mean_df["Latitude (WGS-84)"], mean_df["Longitude (WGS-84)"]], zoom_start=12)
-folium_pane = pn.pane.plot.Folium(m, height=400)
+coordinate_map = fl.Map(location=[mean_df["Latitude (WGS-84)"], mean_df["Longitude (WGS-84)"]], zoom_start=12)
+interactive_map_panel = pn.pane.plot.Folium(coordinate_map, height=400)
+
+# for loop to put markers corresponding to the 15 unique locations ontto the map
+for latitude, longititude,project in zip(unique_coordinates_df["Latitude (WGS-84)"],
+                                unique_coordinates_df["Longitude (WGS-84)"],
+                                df.loc[unique_coordinates_df.index]["Project"]):
+    fl.Marker([latitude,longititude],popup=project,tooltip="click for project").add_to(coordinate_map)
+
+# update map panel to include these markers
+interactive_map_panel.object = coordinate_map
+
+
 
 
 # put the contents of the above elemnts into a column to get a single object for the whole first page
 fullpage1_collumn = pn.Column(alert_panel_text_page1,alert_panel_pandasversion,df_row)
+
+
 
 # make placeholder alert and markdown title panel for future geographical visualisation
 markdown_panel_title_page2 = pn.pane.Markdown("# future geographical visualisation")
 alert_panel_text_page2 = pn.pane.Alert("this is simply a placeholder, the actual figure has yet to be finished")
 
 # add placeholders together into a column to get a single object for the second page
-fullpage2_collumn = pn.Column(markdown_panel_title_page2, alert_panel_text_page2,folium_pane)
+fullpage2_collumn = pn.Column(markdown_panel_title_page2, alert_panel_text_page2,interactive_map_panel)
 
 # add tabs so I can seperated the fd representations and the future geographical visualisation
 tabs = pn.Tabs(
