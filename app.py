@@ -3,6 +3,8 @@ import pandas as pd # import pandas for data handling purposes
 import panel as pn # import panel for ui purposes
 # panel run command: panel serve app.py --dev
 
+import numpy as np
+
 import folium as fl
 
 import matplotlib.pyplot as plt
@@ -75,7 +77,7 @@ plt.xticks(ticks=range(len(df_uniques.index)),ha="right",va="top", labels=df_uni
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 
 # add a line ot show the total amount of rows
-plt.axhline(y=239320, color='red', linestyle='--', linewidth=2, label='total rows')
+plt.axhline(y=239320, color='red', linestyle='--', linewidth=2, label='total row amount')
 
 # log plot cause very broad value range
 plt.yscale('log')
@@ -86,17 +88,75 @@ plt.legend()
 # avoid overlap
 plt.tight_layout()
 
-plot_pane = pn.pane.Matplotlib(plt.gcf(), dpi=100)
+unique_plot_pane = pn.pane.Matplotlib(plt.gcf(), dpi=100)
+
+## plot to show the na's and not na's per column
+# Sample function to count N/A-like values and actual values per column
+def count_na_and_values(df):
+    na_counts = {}
+    actual_counts = {}
+    
+    for column in df.columns:
+        # Count the number of NaN or N/A-like values (e.g., 'NaN', 'N/A', 'unknown')
+        na_count = df[column].isna().sum() + df[column].isin(['NaN', 'N/A', 'unknown']).sum()
+        # Count the number of actual values (non-NaN and non-N/A-like)
+        actual_count = len(df[column]) - na_count
+        
+        na_counts[column] = na_count
+        actual_counts[column] = actual_count
+    
+    return na_counts, actual_counts
+
+# Calculate counts
+na_counts, actual_counts = count_na_and_values(df)
+
+# Plotting the bar chart with two segments for each column
+fig, ax = plt.subplots(figsize=(15, 8))
+bar_width = 0.6  # Width of the bars
+index = np.arange(len(df.columns))  # Position of the bars
+
+# Plot N/A-like values as one part of the bar (in red)
+bars1 = ax.bar(index, na_counts.values(), bar_width, color='red', label='N/A-like Values')
+
+# Plot actual values as another part of the bar (in blue)
+bars2 = ax.bar(index, actual_counts.values(), bar_width, bottom=list(na_counts.values()), color='blue', label='Actual Values')
+
+# Plot labels
+ax.set_xlabel("Columns")
+ax.set_ylabel("Number of Values")
+ax.set_title("Distribution of N/A-like and Actual Values per Column")
+ax.set_xticks(index)
+ax.set_xticklabels(df.columns, rotation=45, ha='right')
+ax.legend()
+
+plt.tight_layout()
+na_distr_plot_pane = pn.pane.Matplotlib(plt.gcf(), dpi=100)
+
+## unique values dropdown interactive df
+# Function to create a DataFrame of unique values for a given column
+def get_unique_values_df(selected_col):
+    unique_values = pd.Series(df[selected_col].unique())
+    return pn.pane.DataFrame(unique_values, name=selected_col, width=400)
+
+# Create a dropdown menu to select a column from the DataFrame (using Select)
+dropdown = pn.widgets.Select(name='Select Column, to display unique values', options=list(df.columns))
+
+# Panel to update the displayed DataFrame based on the dropdown selection
+interactive_panel = pn.bind(get_unique_values_df, selected_col=dropdown)
+
+# Display the dropdown and the interactive panel
+interactive_uniques_per_column_panel = pn.Column(dropdown, interactive_panel)
+
 
 # put the contents of the above elemnts into a column to get a single object for the whole first page
-fullpage1_collumn = pn.Column(alert_panel_text_page1,alert_panel_pandasversion,df_row,plot_pane)
+fullpage1_collumn = pn.Column(alert_panel_text_page1,alert_panel_pandasversion,df_row,unique_plot_pane,na_distr_plot_pane)
 
 # make placeholder alert and markdown title panel for future geographical visualisation
-markdown_panel_title_page2 = pn.pane.Markdown("#geographical visualisation")
+markdown_panel_title_page2 = pn.pane.Markdown("# geographical visualisation")
 alert_panel_text_page2 = pn.pane.Alert("ask about marker clustering plugin (https://python-visualization.github.io/folium/latest/user_guide/plugins/marker_cluster.html)")
 
 # add placeholders together into a column to get a single object for the second page
-fullpage2_collumn = pn.Column(markdown_panel_title_page2, alert_panel_text_page2,interactive_map_panel)
+fullpage2_collumn = pn.Column(markdown_panel_title_page2, alert_panel_text_page2,interactive_map_panel,interactive_uniques_per_column_panel)
 
 # add tabs so I can seperated the fd representations and the future geographical visualisation
 tabs = pn.Tabs(
