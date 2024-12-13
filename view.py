@@ -73,6 +73,7 @@ class View_example:
     def create_dropdown_panel(self):
         """create an interactive dropdown to display unique values per column"""
         dropdown = pn.widgets.Select(name="Select Column to Display Unique Values", options=list(self.model.df.columns))
+        dropdown.value = "Project"
         panel = pn.bind(lambda col: pn.pane.DataFrame(pd.Series(self.model.get_column_unique_values(col))), col=dropdown)
         return pn.Column(dropdown, panel)
     
