@@ -1,6 +1,6 @@
 import panel as pn
-from model_example import Model_example
-from view_example import View_example
+from model import Model_example
+from view import View_example
 
 class Controller:
     def __init__(self, model, view):
