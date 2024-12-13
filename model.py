@@ -23,3 +23,20 @@ class Model_example:
         # note that the pandas read fucniton has to be called with the low_memory variable as False
         # this is because of the size of the dataset
         return pd.read_csv(self.filepath, low_memory=False)
+    
+    def get_column_unique_values(self, column_name):
+        """get unique values from a specific column"""
+        return self.df[column_name].unique()
+
+    def count_na_and_actual_values(self):
+        """calculate counts of N/A-like and actual values for each column"""
+        na_counts = {}
+        actual_counts = {}
+
+        for column in self.df.columns:
+            na_count = self.df[column].isna().sum() + self.df[column].isin(['NaN', 'N/A', 'unknown']).sum()
+            actual_count = len(self.df[column]) - na_count
+            na_counts[column] = na_count
+            actual_counts[column] = actual_count
+
+        return na_counts, actual_counts

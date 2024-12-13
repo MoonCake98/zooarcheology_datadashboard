@@ -13,8 +13,10 @@ class Controller:
         alert_pandas_version, alert_page1 = self.view.create_alerts() # create a few etst alerts
         interactive_map_pane = self.view.create_map() # create interactive map from dataset coords
 
+        unique_values_plot, na_values_plot = self.view.create_plots() # create plots
+
         # mash together the pane components into pages using the column method
-        page1 = pn.Column(alert_pandas_version, alert_page1) 
+        page1 = pn.Column(alert_pandas_version, alert_page1, unique_values_plot, na_values_plot)
         page2 = pn.Column(interactive_map_pane)
 
         # [put these columns through the tabs function to generate a tab structure]

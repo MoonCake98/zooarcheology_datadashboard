@@ -37,3 +37,36 @@ class View_example:
 
         return pn.pane.plot.Folium(coord_map, height=400)
     
+
+    def create_plots(self):
+        """create plots for unique values and N/A- value distribution"""
+
+        # Unique values plot
+        unique_counts = self.model.df.nunique()
+        plt.figure(figsize=(15, 8))
+        unique_counts.plot(kind='bar', color='skyblue', edgecolor='black')
+        plt.xlabel("Columns")
+        plt.ylabel("Number of Unique Values")
+        plt.title("Unique Values per Column")
+        plt.xticks(ticks=range(len(unique_counts.index)), labels=unique_counts.index, rotation=45)
+        plt.yscale('log')
+        plt.axhline(y=239320, color='red', linestyle='--', linewidth=2, label='Total Rows')
+        plt.legend()
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        unique_values_plot = pn.pane.Matplotlib(plt.gcf(), dpi=100)
+
+        # N/A-ish values distribution
+        na_counts, actual_counts = self.model.count_na_and_actual_values()
+        fig, ax = plt.subplots(figsize=(15, 8))
+        index = np.arange(len(na_counts))
+        ax.bar(index, na_counts.values(), label='N/A-like Values', color='red')
+        ax.bar(index, actual_counts.values(), bottom=list(na_counts.values()), label='Actual Values', color='blue')
+        ax.set_xticks(index)
+        ax.set_xticklabels(self.model.df.columns, rotation=45)
+        ax.set_title("N/A-like vs Actual Values per Column")
+        plt.tight_layout()
+        na_values_plot = pn.pane.Matplotlib(plt.gcf(), dpi=100)
+
+        return unique_values_plot, na_values_plot
+    
