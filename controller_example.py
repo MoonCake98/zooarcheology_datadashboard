@@ -10,7 +10,8 @@ class Controller:
 
     def build_page(self):
         alert_pandas_version, alert_page1 = self.view.create_alerts()
-        page = pn.Column(alert_pandas_version, alert_page1)
+        interactive_map_pane = self.view.create_map()
+        page = pn.Column(alert_pandas_version, alert_page1,interactive_map_pane)
         return page
 
 
