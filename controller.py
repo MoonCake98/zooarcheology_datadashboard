@@ -8,17 +8,19 @@ class Controller:
         self.model = model # data model
         self.view = view # panel panels
 
-    def build_page(self):
+    def build_tabs(self):
         alert_pandas_version, alert_page1 = self.view.create_alerts()
         interactive_map_pane = self.view.create_map()
-        page = pn.Column(alert_pandas_version, alert_page1,interactive_map_pane)
-        return page
+        page1 = pn.Column(alert_pandas_version, alert_page1)
+        page2 = pn.Column(interactive_map_pane)
+        tabs = pn.Tabs(("data visualisations",page1),("geographical visualisation",page2))
+        return tabs
 
 
     def serve(self):
         """serve the contents constructed in build_page"""
-        page = self.build_page()
-        page.servable()
+        tabs = self.build_tabs()
+        tabs.servable()
 
 model = Model_example("~/Downloads/f07bce4f-b08c-fe92-6505-c9e534d89a09--v1--full.csv")
 view = View_example(model)
