@@ -15,9 +15,18 @@ class Controller:
 
         unique_values_plot, na_values_plot = self.view.create_plots() # create plots
 
+        uniques_dropdown = self.view.create_dropdown_panel() # create dropdown panel for uniqes
+
+        data_visualisation_page_md_title,geographical_visualisation_page_md_title = self.view.create_markdown_panels()
+
+
+
         # mash together the pane components into pages using the column method
-        page1 = pn.Column(alert_pandas_version, alert_page1, unique_values_plot, na_values_plot)
-        page2 = pn.Column(interactive_map_pane)
+        page1 = pn.Column(data_visualisation_page_md_title,
+                           alert_pandas_version, alert_page1,
+                           unique_values_plot, na_values_plot, uniques_dropdown)
+        page2 = pn.Column(geographical_visualisation_page_md_title, interactive_map_pane)
+
 
         # [put these columns through the tabs function to generate a tab structure]
         tabs = pn.Tabs(("data visualisations",page1),("geographical visualisation",page2))

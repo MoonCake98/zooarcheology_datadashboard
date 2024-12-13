@@ -70,3 +70,14 @@ class View_example:
 
         return unique_values_plot, na_values_plot
     
+    def create_dropdown_panel(self):
+        """create an interactive dropdown to display unique values per column"""
+        dropdown = pn.widgets.Select(name="Select Column to Display Unique Values", options=list(self.model.df.columns))
+        panel = pn.bind(lambda col: pn.pane.DataFrame(pd.Series(self.model.get_column_unique_values(col))), col=dropdown)
+        return pn.Column(dropdown, panel)
+    
+    def create_markdown_panels(self):
+        """create some markdown panels to use in the pages for context"""
+        data_visualisation_page_md_title = pn.pane.Markdown("# data visualisations")
+        geographical_visualisation_page_md_title = pn.pane.Markdown("# geographical visualisation")
+        return data_visualisation_page_md_title,geographical_visualisation_page_md_title
