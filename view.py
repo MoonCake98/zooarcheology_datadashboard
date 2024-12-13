@@ -19,7 +19,7 @@ class View_example:
     def create_map(self):
         """create interactive map with markers centered on the mean of all unique coordinates"""
         mean_coords = self.model.mean_coordinates
-        coord_map = fl.Map(location=[mean_coords["Latitude (WGS-84)"], mean_coords["Longitude (WGS-84)"]], zoom_start=12)
+        coord_map = fl.Map(location=[mean_coords["Latitude (WGS-84)"], mean_coords["Longitude (WGS-84)"]], zoom_start=6)
         for lat, lng, project in zip(
             self.model.unique_coordinates_df["Latitude (WGS-84)"],
             self.model.unique_coordinates_df["Longitude (WGS-84)"],
