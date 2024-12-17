@@ -102,9 +102,20 @@ class View_example:
     
 
     def create_divider_panel(self):
+        """create a divider panel so we can clearly indicate sections of a page"""
         return pn.layout.Divider(sizing_mode='stretch_width')
     
 
     def create_df_head_panel(self,columns):
-        # columns ia redundant for now because I plan to implement filtering in the future
+        # columns is redundant for now because I plan to implement filtering in the future
         return pn.widgets.DataFrame(self.model.df.head(), sizing_mode='stretch_width')
+    
+    def create_page2_column(self,title_md_panel):
+        """
+        generate a column containing the contyents of page 2,
+        this is a funciton in view so we don't have to 
+        load in the page until we switch to the relevant tab
+        """
+        return pn.Column(title_md_panel,
+                         create_map())
+
