@@ -28,6 +28,8 @@ class Controller:
         page1_figure_tabs = pn.Tabs(("unique values",unique_values_plot),
                                     ("n/a values",na_values_plot),
                                     ("unique values per column",uniques_dropdown),
+                                    ("dataframe head",self.view.create_df_head_panel(["a","b"])),
+                                     dynamic = True,
                                     tabs_location = "right")
         
 

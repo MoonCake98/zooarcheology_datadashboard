@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from folium.plugins import MarkerCluster
-import seaborn as sns
 
 class View_example:
     def __init__(self, model):
@@ -101,3 +100,8 @@ class View_example:
 
     def create_divider_panel(self):
         return pn.layout.Divider(sizing_mode='stretch_width')
+    
+
+    def create_df_head_panel(self,columns):
+        # columns ia redundant for now because I plan to implement filtering in the future
+        return self.model.df.head()
