@@ -25,10 +25,10 @@ class View_example:
 
     def create_map(self):
         """create interactive map with markers centered on the mean of all unique coordinates"""
+        coord_map = fl.Map(location=[self.model.mean_coordinates ["Latitude (WGS-84)"],
+                                     self.model.mean_coordinates ["Longitude (WGS-84)"]], zoom_start=6)
 
-        mean_coords = self.model.mean_coordinates 
-
-        coord_map = fl.Map(location=[mean_coords["Latitude (WGS-84)"], mean_coords["Longitude (WGS-84)"]], zoom_start=6)
+        marker_cluster = MarkerCluster().add_to(coord_map)
 
         # for loop for generating markers on all the unique coords
         # has to be done like this because you can only create one marker at a time
@@ -37,7 +37,7 @@ class View_example:
             self.model.unique_coordinates_df["Longitude (WGS-84)"],
             self.model.df.loc[self.model.unique_coordinates_df.index]["Project"]
         ):
-            fl.Marker([lat, lng], popup=project, tooltip="Click for project").add_to(coord_map)
+            fl.Marker([lat, lng], popup=project, tooltip="Click for project").add_to(marker_cluster)
             
 
         return pn.pane.plot.Folium(coord_map, height=400)
@@ -117,5 +117,5 @@ class View_example:
         load in the page until we switch to the relevant tab
         """
         return pn.Column(title_md_panel,
-                         create_map())
+                         self.create_map())
 
