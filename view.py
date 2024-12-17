@@ -43,10 +43,8 @@ class View_example:
         return pn.pane.plot.Folium(coord_map, height=400)
     
 
-    def create_static_plots(self):
-        """create plots for unique values and N/A- value distribution"""
-
-        # Unique values plot
+    def create_unique_values_fig_panel(self):
+        """create a plot for unique values distributed over the dataframe"""
         unique_counts = self.model.df.nunique()
         plt.figure(figsize=(15, 8))
         unique_counts.plot(kind='bar', color='steelblue')
@@ -61,7 +59,11 @@ class View_example:
         plt.figtext(0.5, 0.01, txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.grid(axis='y', linestyle='--', alpha=0.7)
         plt.tight_layout()
-        unique_values_plot = pn.pane.Matplotlib(plt.gcf(), dpi=100)
+        return pn.pane.Matplotlib(plt.gcf(), dpi=100)
+
+
+    def create_na_values_fig_panel(self):
+        """create plot N/A- value distribution"""
 
         # N/A-ish values distribution
         na_counts, actual_counts = self.model.count_na_and_actual_values()
@@ -79,7 +81,7 @@ class View_example:
         # ax.set_facecolor(background_color)  # background color for the axes
         na_values_plot = pn.pane.Matplotlib(plt.gcf(), dpi=100)
 
-        return unique_values_plot, na_values_plot
+        return pn.pane.Matplotlib(plt.gcf(), dpi=100)
     
 
     def create_dropdown_panel(self):
@@ -105,4 +107,4 @@ class View_example:
 
     def create_df_head_panel(self,columns):
         # columns ia redundant for now because I plan to implement filtering in the future
-        return pn.widgets.DataFrame(self.model.df.head(), sizing_mode='stretch_width' )
+        return pn.widgets.DataFrame(self.model.df.head(), sizing_mode='stretch_width')

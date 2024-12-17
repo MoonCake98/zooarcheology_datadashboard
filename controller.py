@@ -14,7 +14,9 @@ class Controller:
         # alert_pandas_version, alert_page1 = self.view.create_alerts() # create a few etst alerts
         interactive_map_pane = self.view.create_map() # create interactive map from dataset coords
 
-        unique_values_plot, na_values_plot = self.view.create_static_plots() # create static plots
+        unique_values_plot = self.view.create_unique_values_fig_panel() # create static plots
+
+        na_values_plot = self.view.create_na_values_fig_panel()
 
         uniques_dropdown = self.view.create_dropdown_panel() # create dropdown panel for uniqes
 
