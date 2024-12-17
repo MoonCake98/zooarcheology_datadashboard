@@ -24,13 +24,17 @@ class Controller:
             self.view.create_markdown_panels()
         # divider = self.view.create_divider_panel()
         # interactive_uniques_distr_panel = self.view.create_interactive_uniques_distribution_plot()
+
+        page1_figure_tabs = pn.Tabs(("unique values",unique_values_plot),
+                                    ("n/a values",na_values_plot),
+                                    ("unique values per column",uniques_dropdown),
+                                    tabs_location = "right")
         
 
         # mash together the pane components into pages using the column method
         page1 = pn.Column(data_visualisation_page_md_title,
                         #   divider,
-                          unique_values_plot, na_values_plot,
-                          uniques_dropdown)
+                        page1_figure_tabs)
         page2 = pn.Column(geographical_visualisation_page_md_title,
                         #   divider,
                           interactive_map_pane)
