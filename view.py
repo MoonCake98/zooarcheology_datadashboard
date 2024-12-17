@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from folium.plugins import MarkerCluster
 
+
 class View_example:
     def __init__(self, model):
         """initialise view object with the model data as a self property"""
@@ -104,4 +105,4 @@ class View_example:
 
     def create_df_head_panel(self,columns):
         # columns ia redundant for now because I plan to implement filtering in the future
-        return self.model.df.head()
+        return pn.widgets.DataFrame(self.model.df.head(), sizing_mode='stretch_width' )
