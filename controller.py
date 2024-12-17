@@ -8,28 +8,36 @@ class Controller:
         self.model = model # data model
         self.view = view # panel panels
 
+
     def build_tabs(self):
         """generate the tabs from the panels the view object methods provide"""
-        alert_pandas_version, alert_page1 = self.view.create_alerts() # create a few etst alerts
+        # alert_pandas_version, alert_page1 = self.view.create_alerts() # create a few etst alerts
         interactive_map_pane = self.view.create_map() # create interactive map from dataset coords
 
-        unique_values_plot, na_values_plot = self.view.create_plots() # create plots
+        unique_values_plot, na_values_plot = self.view.create_static_plots() # create static plots
 
         uniques_dropdown = self.view.create_dropdown_panel() # create dropdown panel for uniqes
 
-        data_visualisation_page_md_title,geographical_visualisation_page_md_title = self.view.create_markdown_panels()
-
-
+        # cerate md titles for the tabs
+        data_visualisation_page_md_title, \
+        geographical_visualisation_page_md_title = \
+            self.view.create_markdown_panels()
+        # divider = self.view.create_divider_panel()
+        # interactive_uniques_distr_panel = self.view.create_interactive_uniques_distribution_plot()
+        
 
         # mash together the pane components into pages using the column method
         page1 = pn.Column(data_visualisation_page_md_title,
-                           alert_pandas_version, alert_page1,
-                           unique_values_plot, na_values_plot, uniques_dropdown)
-        page2 = pn.Column(geographical_visualisation_page_md_title, interactive_map_pane)
+                        #   divider,
+                          unique_values_plot, na_values_plot,
+                          uniques_dropdown)
+        page2 = pn.Column(geographical_visualisation_page_md_title,
+                        #   divider,
+                          interactive_map_pane)
 
 
         # [put these columns through the tabs function to generate a tab structure]
-        tabs = pn.Tabs(("data visualisations",page1),("geographical visualisation",page2))
+        tabs = pn.Tabs(("data visualisations", page1),("geographical visualisation", page2))
         return tabs
 
 
