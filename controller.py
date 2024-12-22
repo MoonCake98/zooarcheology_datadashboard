@@ -17,6 +17,7 @@ class Controller:
         data_visualisation_page_md_title, \
         geographical_visualisation_page_md_title = \
             self.view.create_markdown_panels()
+        selection_widget = self.view.create_multiselect_widget()
         # divider = self.view.create_divider_panel()
         # interactive_uniques_distr_panel = self.view.create_interactive_uniques_distribution_plot()
 
@@ -25,14 +26,14 @@ class Controller:
                                     ("unique values per column",self.view.create_dropdown_panel()),
                                     ("dataframe head",self.view.create_df_head_panel(["a","b"])),
                                      dynamic = True,
-                                    tabs_location = "right")
+                                    tabs_location = "above")
         # mash together the pane components into pages using the column method
         page1 = pn.Column(data_visualisation_page_md_title,
                         #   divider,
-                        page1_figure_tabs)
+                        pn.Row(selection_widget,page1_figure_tabs))
         # put these columns through the tabs function to generate a tab structure
         tabs = pn.Tabs(("data visualisations", page1),\
-                       ("geographical visualisation", 
+                       ("geographical visualisation",
                         self.view.create_page2_column(geographical_visualisation_page_md_title)),
                        dynamic = True)
         return tabs

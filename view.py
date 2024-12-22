@@ -1,4 +1,5 @@
 import panel as pn
+import panel.widgets as wdgts
 import folium as fl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -110,6 +111,7 @@ class View_example:
         # columns is redundant for now because I plan to implement filtering in the future
         return pn.widgets.DataFrame(self.model.df.head(), sizing_mode='stretch_width')
     
+
     def create_page2_column(self,title_md_panel):
         """
         generate a column containing the contyents of page 2,
@@ -119,3 +121,9 @@ class View_example:
         return pn.Column(title_md_panel,
                          self.create_map())
 
+
+    def create_multiselect_widget(self):
+        """create a widget for filtering columns in panel test"""
+
+        return pn.widgets.MultiSelect(name = "select columns to keep",
+                                     options=list(self.model.df.columns))
