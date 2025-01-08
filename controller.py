@@ -17,20 +17,19 @@ class Controller:
         data_visualisation_page_md_title, \
         geographical_visualisation_page_md_title = \
             self.view.create_markdown_panels()
-        selection_widget = self.view.create_multiselect_widget()
+        column_selection_widget = self.view.create_multichoice_widget()
         # divider = self.view.create_divider_panel()
         # interactive_uniques_distr_panel = self.view.create_interactive_uniques_distribution_plot()
 
-        page1_figure_tabs = pn.Tabs(("unique values",self.view.create_unique_values_fig_panel()),
-                                    ("n/a values",self.view.create_na_values_fig_panel()),
+        page1_figure_tabs = pn.Tabs(("unique values",pn.bind(self.view.create_unique_values_fig_panel, columns = column_selection_widget)),
+                                    ("n/a values", pn.bind(self.view.create_na_values_fig_panel, columns = column_selection_widget)),
                                     ("unique values per column",self.view.create_dropdown_panel()),
-                                    ("dataframe head",self.view.create_df_head_panel(["a","b"])),
-                                     dynamic = True,
+                                    ("dataframe head",pn.bind(self.view.create_df_head_panel, columns = column_selection_widget)),
+                                    dynamic = True,
                                     tabs_location = "above")
         # mash together the pane components into pages using the column method
         page1 = pn.Column(data_visualisation_page_md_title,
-                        #   divider,
-                        pn.Row(selection_widget,page1_figure_tabs))
+                        pn.Row(column_selection_widget,page1_figure_tabs))
         # put these columns through the tabs function to generate a tab structure
         tabs = pn.Tabs(("data visualisations", page1),\
                        ("geographical visualisation",
@@ -45,7 +44,10 @@ class Controller:
         tabs = self.build_tabs()
 
         # display the tabs
-        tabs.servable()
+        server = tabs.servable()
+
+        return server
+
 
 model = Model_example("~/Downloads/f07bce4f-b08c-fe92-6505-c9e534d89a09--v1--full.csv")
 view = View_example(model)

@@ -44,9 +44,9 @@ class View_example:
         return pn.pane.plot.Folium(coord_map, height=400)
     
 
-    def create_unique_values_fig_panel(self):
+    def create_unique_values_fig_panel(self, columns):
         """create a plot for unique values distributed over the dataframe"""
-        unique_counts = self.model.df.nunique()
+        unique_counts = self.model.get_subset_df(columns).nunique()
         plt.figure(figsize=(15, 8))
         unique_counts.plot(kind='bar', color='steelblue')
         plt.xlabel("Columns")
@@ -63,17 +63,18 @@ class View_example:
         return pn.pane.Matplotlib(plt.gcf(), dpi=100)
 
 
-    def create_na_values_fig_panel(self):
+    def create_na_values_fig_panel(self, columns):
         """create plot N/A- value distribution"""
 
         # N/A-ish values distribution
-        na_counts, actual_counts = self.model.count_na_and_actual_values()
+        filtered_df = self.model.get_subset_df(columns)
+        na_counts, actual_counts = self.model.count_na_and_actual_values(df=filtered_df, columns= columns)
         fig, ax = plt.subplots(figsize=(15, 8))
         index = np.arange(len(na_counts))
         ax.bar(index, na_counts.values(), label='N/A-like Values', color='salmon')
         ax.bar(index, actual_counts.values(), bottom=list(na_counts.values()), label='Actual Values', color='steelblue')
         ax.set_xticks(index)
-        ax.set_xticklabels(self.model.df.columns ,ha="right" ,va="top" ,rotation=45)
+        ax.set_xticklabels(columns ,ha="right" ,va="top" ,rotation=45)
         ax.set_title("N/A-like vs Actual Values per Column")
         plt.legend()
         plt.tight_layout()
@@ -108,7 +109,7 @@ class View_example:
 
     def create_df_head_panel(self,columns):
         # columns is redundant for now because I plan to implement filtering in the future
-        return pn.widgets.DataFrame(self.model.df.head(), sizing_mode='stretch_width')
+        return pn.widgets.DataFrame(self.model.get_subset_df(columns).head(), sizing_mode='stretch_width')
     
 
     def create_page2_column(self,title_md_panel):

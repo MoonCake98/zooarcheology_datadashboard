@@ -33,14 +33,14 @@ class Model_example:
         return self.get_subset_df(column_name).unique()
 
 
-    def count_na_and_actual_values(self) -> pd.DataFrame:
+    def count_na_and_actual_values(self, df, columns) -> pd.DataFrame:
         """calculate counts of N/A-like and actual values for each column"""
         na_counts = {}
         actual_counts = {}
 
-        for column in self.df.columns:
-            na_count = self.df[column].isna().sum() + self.df[column].isin(['NaN', 'N/A', 'unknown']).sum()
-            actual_count = len(self.df[column]) - na_count
+        for column in columns:
+            na_count = df[column].isna().sum() + df[column].isin(['NaN', 'N/A', 'unknown']).sum()
+            actual_count = len(df[column]) - na_count
             na_counts[column] = na_count
             actual_counts[column] = actual_count
 
