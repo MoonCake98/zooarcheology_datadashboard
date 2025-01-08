@@ -80,7 +80,6 @@ class View_example:
         # background_color = "#213635"
         # fig.patch.set_facecolor(background_color)  # background color for the figure
         # ax.set_facecolor(background_color)  # background color for the axes
-        na_values_plot = pn.pane.Matplotlib(plt.gcf(), dpi=100)
 
         return pn.pane.Matplotlib(plt.gcf(), dpi=100)
     
@@ -122,8 +121,18 @@ class View_example:
                          self.create_map())
 
 
-    def create_multiselect_widget(self):
+    def create_multichoice_widget(self):
         """create a widget for filtering columns in panel test"""
 
-        return pn.widgets.MultiSelect(name = "select columns to keep",
-                                     options=list(self.model.df.columns))
+        return pn.widgets.MultiChoice(name = "select columns to keep",
+                                     options=list(self.model.df.columns),
+                                     value = [self.model.df.columns[1],
+                                              self.model.df.columns[2],
+                                              self.model.df.columns[4],
+                                              self.model.df.columns[6],
+                                              self.model.df.columns[7],
+                                              self.model.df.columns[8],
+                                              self.model.df.columns[10],
+                                              self.model.df.columns[11]
+                                     ]
+                                     )
