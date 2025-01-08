@@ -100,7 +100,9 @@ class View_example:
 
         data_visualisation_page_md_title = pn.pane.Markdown("# data visualisations\n---")
         geographical_visualisation_page_md_title = pn.pane.Markdown("# geographical visualisation\n---")
-        return data_visualisation_page_md_title,geographical_visualisation_page_md_title
+        row_filter_md_title_and_description = pn.pane.Markdown(
+            "# filter row values\n---\nselect the values of the rows you want to filter the data on")
+        return data_visualisation_page_md_title, geographical_visualisation_page_md_title, row_filter_md_title_and_description
     
 
     def create_divider_panel(self):

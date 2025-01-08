@@ -15,16 +15,21 @@ class Controller:
 
         # cerate md titles for the tabs
         data_visualisation_page_md_title, \
-        geographical_visualisation_page_md_title = \
+        geographical_visualisation_page_md_title,\
+        row_filter_md_title_and_description= \
             self.view.create_markdown_panels()
         column_selection_widget = self.view.create_multichoice_widget()
         # divider = self.view.create_divider_panel()
         # interactive_uniques_distr_panel = self.view.create_interactive_uniques_distribution_plot()
+        dataframe_column = pn.Column(
+            pn.bind(self.view.create_df_panel,
+                     columns = column_selection_widget),
+                     row_filter_md_title_and_description)
 
         page1_figure_tabs = pn.Tabs(("unique values",pn.bind(self.view.create_unique_values_fig_panel, columns = column_selection_widget)),
                                     ("n/a values", pn.bind(self.view.create_na_values_fig_panel, columns = column_selection_widget)),
                                     ("unique values per column",self.view.create_dropdown_panel()),
-                                    ("dataframe",pn.bind(self.view.create_df_panel, columns = column_selection_widget)),
+                                    ("dataframe",dataframe_column),
                                     dynamic = True,
                                     tabs_location = "above")
         # mash together the pane components into pages using the column method
