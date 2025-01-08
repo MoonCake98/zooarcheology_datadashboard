@@ -12,6 +12,7 @@ class View_example:
         """initialise view object with the model data as a self property"""
 
         self.model = model
+        pn.extension('tabulator')
         return
 
 
@@ -109,7 +110,7 @@ class View_example:
 
     def create_df_head_panel(self,columns):
         # columns is redundant for now because I plan to implement filtering in the future
-        return pn.widgets.DataFrame(self.model.get_subset_df(columns).head(), sizing_mode='stretch_width')
+        return pn.widgets.Tabulator(self.model.get_subset_df(columns).head())
     
 
     def create_page2_column(self,title_md_panel):
