@@ -141,10 +141,9 @@ class View_example:
                                      ]
                                      )
     
-    # def create_row_value_filter_multichoice_widget(self,columns):
-    #     """create a widget for the purposes of filtering the dataset based on row values"""
+    
+    def create_row_value_filter_multichoice_widget(self,column):
+        """create a widget for the purposes of filtering the dataset based on row values"""
 
-    #     available_values = self.model.
-
-    #     return pn.widgets.MultiChoice(name = "select values to filter on",
-    #                                   options = )
+        return pn.widgets.MultiChoice(name = "select values to filter on",
+                                      options = self.model.get_unique_values_per_column_list(column))
