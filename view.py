@@ -85,11 +85,16 @@ class View_example:
 
         return pn.pane.Matplotlib(plt.gcf(), dpi=100)
     
+    def create_column_dropdown_widget(self):
+        """create a dropdown menu to select a column out of the all available ones"""
+        return pn.widgets.Select(name="select a column for it's unqiue values",
+                                 options=list(self.model.df.columns),
+                                 value="Project")
 
     def create_dropdown_panel(self):
         """create an interactive dropdown to display unique values per column"""
 
-        dropdown = pn.widgets.Select(name="Select Column to Display Unique Values", options=list(self.model.df.columns))
+        dropdown = create_column_dropdown_widget()
         dropdown.value = "Project"
         panel = pn.bind(lambda col: pn.widgets.Tabulator(pd.DataFrame(pd.Series(self.model.get_column_unique_values_subset(col))),pagination='remote', page_size=20), col=dropdown)
         return pn.Column(dropdown, panel)
@@ -141,6 +146,11 @@ class View_example:
                                      ]
                                      )
     
+    def create_column_dropdown_widget(self):
+        """create a dropdown menu to select a column out of the all available ones"""
+        return pn.widgets.Select(name="select a column for it's unqiue values",
+                                 options=list(self.model.df.columns),
+                                 value="Project")
     
     def create_row_value_filter_multichoice_widget(self, column="Project"):
         """create a widget for the purposes of filtering the dataset based on row values"""
