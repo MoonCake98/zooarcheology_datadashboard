@@ -50,4 +50,6 @@ class Model_example:
         """get a subset of the dataframe with only the columns provided as arguments"""
         return self.df[columns]
     
-    
+    def get_unique_values_per_column_list(self,column):
+        """returns a list of unique values within the submitted column"""
+        return list(self.df[column].drop_duplicates())
