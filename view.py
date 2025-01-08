@@ -142,7 +142,7 @@ class View_example:
                                      )
     
     
-    def create_row_value_filter_multichoice_widget(self,column):
+    def create_row_value_filter_multichoice_widget(self, column="Project"):
         """create a widget for the purposes of filtering the dataset based on row values"""
 
         return pn.widgets.MultiChoice(name = "select values to filter on",
