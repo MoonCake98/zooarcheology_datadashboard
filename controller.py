@@ -24,7 +24,7 @@ class Controller:
         page1_figure_tabs = pn.Tabs(("unique values",pn.bind(self.view.create_unique_values_fig_panel, columns = column_selection_widget)),
                                     ("n/a values", pn.bind(self.view.create_na_values_fig_panel, columns = column_selection_widget)),
                                     ("unique values per column",self.view.create_dropdown_panel()),
-                                    ("dataframe head",pn.bind(self.view.create_df_head_panel, columns = column_selection_widget)),
+                                    ("dataframe",pn.bind(self.view.create_df_panel, columns = column_selection_widget)),
                                     dynamic = True,
                                     tabs_location = "above")
         # mash together the pane components into pages using the column method

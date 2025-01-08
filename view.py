@@ -91,7 +91,7 @@ class View_example:
 
         dropdown = pn.widgets.Select(name="Select Column to Display Unique Values", options=list(self.model.df.columns))
         dropdown.value = "Project"
-        panel = pn.bind(lambda col: pn.pane.DataFrame(pd.Series(self.model.get_column_unique_values(col))), col=dropdown)
+        panel = pn.bind(lambda col: pn.widgets.Tabulator(pd.DataFrame(pd.Series(self.model.get_column_unique_values(col))),pagination='remote', page_size=20), col=dropdown)
         return pn.Column(dropdown, panel)
     
 
@@ -108,9 +108,9 @@ class View_example:
         return pn.layout.Divider(sizing_mode='stretch_width')
     
 
-    def create_df_head_panel(self,columns):
+    def create_df_panel(self,columns):
         # columns is redundant for now because I plan to implement filtering in the future
-        return pn.widgets.Tabulator(self.model.get_subset_df(columns).head())
+        return pn.widgets.Tabulator(self.model.get_subset_df(columns), pagination='remote', page_size=20)
     
 
     def create_page2_column(self,title_md_panel):
