@@ -28,7 +28,7 @@ class Model_example:
         return pd.read_csv(self.filepath, low_memory=False)
 
 
-    def get_column_unique_values(self, column_name) -> pd.Series :
+    def get_column_unique_values_subset(self, column_name) -> pd.Series :
         """get unique values from a specific column"""
         return self.get_subset_df(column_name).unique()
 
@@ -49,3 +49,5 @@ class Model_example:
     def get_subset_df(self,columns) -> pd.DataFrame:
         """get a subset of the dataframe with only the columns provided as arguments"""
         return self.df[columns]
+    
+    

@@ -91,7 +91,7 @@ class View_example:
 
         dropdown = pn.widgets.Select(name="Select Column to Display Unique Values", options=list(self.model.df.columns))
         dropdown.value = "Project"
-        panel = pn.bind(lambda col: pn.widgets.Tabulator(pd.DataFrame(pd.Series(self.model.get_column_unique_values(col))),pagination='remote', page_size=20), col=dropdown)
+        panel = pn.bind(lambda col: pn.widgets.Tabulator(pd.DataFrame(pd.Series(self.model.get_column_unique_values_subset(col))),pagination='remote', page_size=20), col=dropdown)
         return pn.Column(dropdown, panel)
     
 
@@ -140,3 +140,11 @@ class View_example:
                                               self.model.df.columns[11]
                                      ]
                                      )
+    
+    # def create_row_value_filter_multichoice_widget(self,columns):
+    #     """create a widget for the purposes of filtering the dataset based on row values"""
+
+    #     available_values = self.model.
+
+    #     return pn.widgets.MultiChoice(name = "select values to filter on",
+    #                                   options = )
