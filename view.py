@@ -53,9 +53,18 @@ class View_example:
         plt.xlabel("Columns")
         plt.ylabel("Number of Unique Values")
         plt.title("Unique Values per Column")
-        plt.xticks(ticks=range(len(unique_counts.index)), ha="right", va="top", labels=unique_counts.index, rotation=45)
+        plt.xticks(ticks=range(len(unique_counts.index)),
+                    ha="right",
+                      va="top",
+                        labels=unique_counts.index,
+                          rotation=45)
         plt.yscale('log')
         plt.axhline(y=239320, color='red', linestyle='--', linewidth=2, label='Total Rows')
+        # add labels to indicate the hard numbers if the bars
+        for bar_index, value in enumerate(unique_counts):
+            plt.text(
+                x=bar_index, y=value - (value*0.35), s=str(value), ha='center', va='bottom', fontsize=10, color="white"
+                    )
         plt.legend()
         txt="I need the caption to be present a little below X-axis"
         plt.figtext(0.5, 0.01, txt, wrap=True, horizontalalignment='center', fontsize=12)
@@ -78,6 +87,15 @@ class View_example:
         ax.set_xticklabels(columns ,ha="right" ,va="top" ,rotation=45)
         ax.set_title("N/A-like vs Actual Values per Column")
         plt.legend()
+
+        # add labels to indicate the hard numbers if the bars
+        for bar_index, (na, actual) in enumerate(zip(na_counts.values(), actual_counts.values())):
+            ax.text(
+                x=bar_index, y=na / 2, s=str(na), ha='center', va='center', fontsize=10, color='black'
+            )
+            ax.text(
+                x=bar_index, y=na + actual / 2, s=str(actual), ha='center', va='center', fontsize=10, color='white'
+            )
         plt.tight_layout()
         # background_color = "#213635"
         # fig.patch.set_facecolor(background_color)  # background color for the figure
@@ -116,8 +134,13 @@ class View_example:
     
 
     def create_df_panel(self,columns):
-        # columns is redundant for now because I plan to implement filtering in the future
-        return pn.widgets.Tabulator(self.model.get_subset_df(columns), pagination='remote', page_size=20)
+        """create a panel to display the dataframe"""
+        tabulated_df = pn.widgets.Tabulator(self.model.get_subset_df(columns), pagination='remote', page_size=20)
+        # filename, download_button = tabulated_df.download_menu(
+        # text_kwargs={'name': 'Enter filename', 'value': 'placeholder.csv'},
+        # button_kwargs={'name': 'Download table'}
+        # )
+        return tabulated_df #, filename, download_button
     
 
     def create_page2_column(self,title_md_panel):
@@ -127,7 +150,7 @@ class View_example:
         load in the page until we switch to the relevant tab
         """
         return pn.Column(title_md_panel,
-                         self.create_map())
+                         self.create_map()) 
 
 
     def create_multichoice_widget(self):
