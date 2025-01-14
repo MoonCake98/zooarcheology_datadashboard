@@ -1,5 +1,4 @@
 import pandas as pd
-import hvplot.pandas
 
 class Model_example:
     def __init__(self, filepath):
@@ -9,7 +8,7 @@ class Model_example:
 
         self.df = self.read_dataframe() # read in the data corresponding to the previously provided filepath\
         
-        self.idf = self.df.interactive()
+        self.fdf = self.df.copy()
 
         self.unique_coordinates_df = self.get_unique_coordinates()
 
@@ -22,7 +21,7 @@ class Model_example:
 
 
     def read_dataframe(self) -> pd.DataFrame:
-        """read dsv file into pandas df"""
+        """read csv file into pandas df"""
         # note that the pandas read fucniton has to be called with the low_memory variable as False
         # this is because of the size of the dataset
         return pd.read_csv(self.filepath, low_memory=False)
@@ -53,3 +52,5 @@ class Model_example:
     def get_unique_values_per_column_list(self,column):
         """returns a list of unique values within the submitted column"""
         return list(self.df[column].drop_duplicates())
+
+    
