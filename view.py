@@ -46,7 +46,10 @@ class View_example:
     
 
     def create_unique_values_fig_panel(self, columns):
+        plt.close('all') # close all previous figures
         """create a plot for unique values distributed over the dataframe"""
+        plt.close('all') # close all previous figures
+
         unique_counts = self.model.get_subset_df(columns).nunique()
         plt.figure(figsize=(15, 8))
         unique_counts.plot(kind='bar', color='steelblue')
@@ -103,18 +106,21 @@ class View_example:
 
         return pn.pane.Matplotlib(plt.gcf(), dpi=100)
     
+
+    
     def create_column_dropdown_widget(self):
         """create a dropdown menu to select a column out of the all available ones"""
         return pn.widgets.Select(name="select a column for it's unqiue values",
                                  options=list(self.model.df.columns),
                                  value="Project")
 
-    def create_dropdown_panel(self):
+    def create_dropdown_row(self):
         """create an interactive dropdown to display unique values per column"""
 
         dropdown = self.create_column_dropdown_widget()
         dropdown.value = "Project"
-        panel = pn.bind(lambda col: pn.widgets.Tabulator(pd.DataFrame(pd.Series(self.model.get_column_unique_values_subset(col))),pagination='remote', page_size=20), col=dropdown)
+        panel = pn.bind(lambda col: pn.widgets.Tabulator(pd.DataFrame(pd.Series(self.model.get_column_unique_values_subset(col))),
+                                                         pagination='remote', page_size=20), col=dropdown)
         return pn.Column(dropdown, panel)
     
 
@@ -170,8 +176,15 @@ class View_example:
                                      )
 
     
-    def create_row_value_filter_multichoice_widget(self, column="Project"):
+    def create_row_value_filter_multichoice_widget(self, column):
         """create a widget for the purposes of filtering the dataset based on row values"""
 
         return pn.widgets.MultiChoice(name = "select values to filter on",
                                       options = self.model.get_unique_values_per_column_list(column))
+
+    def create_row_value_filter_combination_row(self):
+        dropdown_column_menu = self.create_column_dropdown_widget()
+        multichoice_panel = pn.bind(self.create_row_value_filter_multichoice_widget,
+                column = dropdown_column_menu)
+        return pn.Row(dropdown_column_menu,
+                         multichoice_panel)
