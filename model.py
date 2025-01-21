@@ -1,18 +1,23 @@
 import pandas as pd
+import time
 
 class Model_example:
     def __init__(self, filepath:str):
         """load in dataset and preprocess some subsets"""
 
+        start_time = time.time()
+
         self.filepath = filepath # define the filepath as a property of the object
 
         self.df = self.read_dataframe() # read in the data corresponding to the previously provided filepath\
         
-        self.fdf = self.df.copy()
+        self.fdf = self.df.copy() # copy of original dataset for the current filtered state
 
-        self.unique_coordinates_df = self.get_unique_coordinates()
+        self.unique_coordinates_df = self.get_unique_coordinates() # all unique coordinates from the df in a df
 
         self.mean_coordinates = self.unique_coordinates_df.mean() # get the mean of the unique coords to get a map starting point
+
+        self.pre_gen_mask_dict = self.pre_generate_masks() # dict of all unqiue value masks
 
 
     def get_unique_coordinates(self) -> pd.DataFrame:
@@ -46,7 +51,13 @@ class Model_example:
                   "Bag  383?", "Level Not recorded","NaN",
                   "Strat Group [??]", "Strat Group [?]",
                   "Strat Group [???]", "(Context Unknown)", 
-                  "Unit [Not indicated]"]).sum()
+                  "Unit [Not indicated]", "Unit 32(?)",
+                  "maybe male?", "Indeterminate", "maybe female?",
+                  "Possibly male", "Possibly female", "Unidentified",
+                  "unidentified","young male?", "Nonidentified",
+                  "possibly male", "Not applicable", "Not determined",
+                  "Other"
+                  ]).sum()
             actual_count = len(df[column]) - na_count
             na_counts[column] = na_count
             actual_counts[column] = actual_count
@@ -69,4 +80,21 @@ class Model_example:
         """updates the filtered dataframe to the selected columns and values"""
         self.fdf = self.get_subset_df(columns)
 
+    def pre_generate_masks(self) -> dict:
+        """generates a mask for the most used unqique values within the dataset, 
+        and stores these within a nested dictionary
+        mask_dict[column_name] = column_dict[unique_value_name] = unique_value_mask"""
+
+        pre_gen_mask_dict = {}
+        # 2,4,5,6,7,8,10,11,13,14,15,16,17,18,19,20,21,23,24,26,27,29,30,32,33,
+        for column in self.df.columns[[2,4,5,6,7,8,10,11,13,14,15,16,
+                                       17,18,19,20,21,23,24,26,27,29,
+                                       30,32,33,35,36]]:
+            column_dict = {}
+            for value in self.df[column].unique():
+                column_dict[value] = self.df[column] == value
+            pre_gen_mask_dict[column] = column_dict
+
+        return pre_gen_mask_dict
     
+        
