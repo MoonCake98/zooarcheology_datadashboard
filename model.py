@@ -19,6 +19,8 @@ class Model_example:
 
         self.pre_gen_mask_dict = self.pre_generate_masks() # dict of all unqiue value masks
 
+        self.unique_val_col_dict = self.generate_unique_val_col_dict() # dict for val's and corresponding col's
+
 
     def get_unique_coordinates(self) -> pd.DataFrame:
         """get unique coords from dataset columns 7 and 8"""
@@ -97,4 +99,18 @@ class Model_example:
 
         return pre_gen_mask_dict
     
-        
+
+    def generate_unique_val_col_dict(self):
+        """generate a dict with every unique value in 
+        the dataframe and the corrseponding column"""
+        unique_val_col_dict = {}
+
+        for column in self.df.columns:
+            for unique_value in self.df[column].unique():
+                unique_val_col_dict[unique_value] = column
+        return unique_val_col_dict
+    
+    # def generate_mask(self, unique_value:str) -> pd.DataFrame:
+    #     """generate a mask for the dataset from the given unique value argument"""
+    #     return self.d
+    
