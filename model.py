@@ -110,7 +110,7 @@ class Model_example:
                 unique_val_col_dict[unique_value] = column
         return unique_val_col_dict
     
-    # def generate_mask(self, unique_value:str) -> pd.DataFrame:
-    #     """generate a mask for the dataset from the given unique value argument"""
-    #     return self.d
+    def generate_mask(self, unique_value:str) -> pd.DataFrame:
+        """generate a mask for the dataset from the given unique value argument"""
+        return self.df[self.unique_val_col_dict[unique_value]] == unique_value
     
