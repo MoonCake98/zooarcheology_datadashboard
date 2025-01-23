@@ -9,7 +9,7 @@ The dataset I have chosen is a dataset related to zoo archeology from opencontex
 
 the tools displayed below have been used for the developement of this dashboard
 
-#### tools:
+#### tools
 |name|version|
 |---|---|
 |python|3.11.7|
