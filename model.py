@@ -114,3 +114,7 @@ class Model_example:
         """generate a mask for the dataset from the given unique value argument"""
         return self.df[self.unique_val_col_dict[unique_value]] == unique_value
     
+    def apply_mask(self, mask):
+        return self.df == mask
+    
+    

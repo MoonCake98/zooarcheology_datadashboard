@@ -4,6 +4,8 @@ import folium as fl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import plotly.express as px
 from folium.plugins import MarkerCluster
 
 
@@ -48,7 +50,6 @@ class View_example:
     def create_unique_values_fig_panel(self, columns):
         plt.close('all') # close all previous figures
         """create a plot for unique values distributed over the dataframe"""
-        plt.close('all') # close all previous figures
 
         unique_counts = self.model.get_subset_df(columns).nunique()
         plt.figure(figsize=(15, 8))
@@ -78,6 +79,8 @@ class View_example:
 
     def create_na_values_fig_panel(self, columns):
         """create plot N/A- value distribution"""
+        plt.close('all') # close all previous figures
+
 
         # N/A-ish values distribution
         filtered_df = self.model.get_subset_df(columns)
@@ -106,11 +109,15 @@ class View_example:
 
         return pn.pane.Matplotlib(plt.gcf(), dpi=100)
     
+    # def create_unique_distribution_fig_panel(self, columns):
+    #         """create a figure to show the distribution of unique values in the dataset"""
+
+
 
     
     def create_column_dropdown_widget(self):
         """create a dropdown menu to select a column out of the all available ones"""
-        return pn.widgets.Select(name="select a column for it's unqiue values",
+        return pn.widgets.Select(name="select a column for its unqiue values",
                                  options=list(self.model.df.columns),
                                  value="Project")
 
@@ -179,12 +186,98 @@ class View_example:
     def create_row_value_filter_multichoice_widget(self, column):
         """create a widget for the purposes of filtering the dataset based on row values"""
 
-        return pn.widgets.MultiChoice(name = "select values to filter on",
+        return pn.widgets.Select(name = "select values to filter on",
                                       options = self.model.get_unique_values_per_column_list(column))
 
     def create_row_value_filter_combination_row(self):
+        """returns a panel row containing a dropdown menu containing the available columns and
+         a multichoice panel whose options are based upon the previously mentioned dropdown menu"""
         dropdown_column_menu = self.create_column_dropdown_widget()
         multichoice_panel = pn.bind(self.create_row_value_filter_multichoice_widget,
                 column = dropdown_column_menu)
-        return pn.Row(dropdown_column_menu,
-                         multichoice_panel)
+        return dropdown_column_menu, multichoice_panel
+    
+    
+    def test_alerts(self):
+        """create a test alert to confirm the working functionality of the pregenerated mask dict"""
+        return pn.pane.Alert(f"{self.model.pre_gen_mask_dict.keys()}")
+    
+    def create_multichoice_applied_filters_widget(self):
+        """create a multichoice panel for the purposes of displaying currently applied filters"""
+        return pn.widgets.MultiChoice(name="currently selected filters",
+                                      options = list(self.model.unique_val_col_dict.keys()))
+    
+    def create_distributions_durations_figure(self, columns):
+        """createa a plot to show the distribution of the durations in the dataset with a bar and line plot"""
+
+        plt.close('all') # close all previous figures
+
+        df = self.model.get_subset_df(columns)
+
+        # calculate duration
+        df['duration'] = df['Late Date (BCE/CE)'] - df['Early Date (BCE/CE)']
+
+        # plot histogram
+        sns.histplot(df['duration'], bins=10, kde=True)
+        plt.title('Distribution of Durations (Years)')
+        plt.xlabel('Duration (Years)')
+        plt.ylabel('Frequency')
+        plt.show()
+
+
+        return pn.pane.Matplotlib(plt.gcf(), dpi=100)
+    
+    def create_heatmap_figure(self, columns):
+        """create heatmap of periods of late and early in 100 year intervals"""
+        plt.close('all') # close all previous figures
+
+        df = self.model.get_subset_df(columns)
+
+        # divide dates into 100year intervals
+        df['Early Century'] = (df['Early Date (BCE/CE)'] // 100).astype(int) * 100
+        df['Late Century'] = (df['Late Date (BCE/CE)'] // 100).astype(int) * 100
+
+        # count events by centuries
+        counts = df.groupby(['Early Century', 'Late Century']).size().reset_index(name='count')
+
+        # pivot table for heatmap
+        heatmap_data = counts.pivot_table(index='Early Century', columns='Late Century', values='count', fill_value=0)
+
+        # slot the heatmap
+        sns.heatmap(heatmap_data, cmap='Blues', annot=True, fmt="d")
+
+        # set the title and labels
+        plt.suptitle('Event Counts by Century (BCE/CE) figure 4', fontsize=16, y=1.05)
+        plt.xlabel('Late Century')
+        plt.ylabel('Early Century')
+
+        # invert the Y-axis so that the century starts from 0 at the top
+        plt.gca().invert_yaxis()
+
+        # set the limits of the Y-axis explicitly, if necessary
+        plt.gca().set_ylim(heatmap_data.index.max() + 1, heatmap_data.index.min() - 1)
+
+
+        return pn.pane.Matplotlib(plt.gcf(), dpi=100)
+
+    def create_scatterplot_figure(self, columns):
+        """create scatter plot to show distribution of late and early dates"""
+        plt.close('all') # close all previous figures
+
+        df = self.model.get_subset_df(columns)
+
+        sns.scatterplot(
+            x='Early Date (BCE/CE)',
+            y='Late Date (BCE/CE)',
+            data=df
+        )
+        plt.axhline(0, color='gray', linestyle='--', label='Start of CE (Y=0)')
+        plt.axvline(0, color='gray', linestyle='--', label='Start of CE (X=0)')
+        plt.title('Early Date vs Late Date (fig 5)')
+        plt.xlabel('Early Date (BCE/CE)')
+        plt.ylabel('Late Date (BCE/CE)')
+        plt.legend()
+
+        return pn.pane.Matplotlib(plt.gcf(), dpi=100)
+    
+    
