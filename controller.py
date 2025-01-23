@@ -23,12 +23,11 @@ class Controller:
         # interactive_uniques_distr_panel = self.view.create_interactive_uniques_distribution_plot()
         dataframe_column = pn.Column(
             pn.bind(self.view.create_df_panel,
-                     columns = column_selection_widget),
-                     row_filter_md_title_and_description)
+                     columns = column_selection_widget))
 
         page1_figure_tabs = pn.Tabs(("unique values",pn.bind(self.view.create_unique_values_fig_panel, columns = column_selection_widget)),
                                     ("n/a values", pn.bind(self.view.create_na_values_fig_panel, columns = column_selection_widget)),
-                                    ("unique values per column",self.view.create_dropdown_panel()),
+                                    ("unique values per column",self.view.create_dropdown_row()),
                                     ("dataframe",dataframe_column),
                                     dynamic = True,
                                     tabs_location = "above")
