@@ -54,7 +54,7 @@ Once this is done, the link to the dashboard can be found in your terminal outpu
 2025-01-23 5:48:43,910 Bokeh app running at: http://localhost:xxxx/controller
 ```
 
-If clicking on the link isn't supported in your IDE, then you will have to manually open a browser and navigate towards the address provided in your terminal output by inputting the link into your addres bar in the format of http://localhost:xxxx/controller
+If clicking on the link isn't supported in your IDE, then you will have to manually open a browser and navigate towards the address provided in your terminal output by inputting the link into your address bar in the format of: http://localhost:xxxx/controller
 
 ## License
 
