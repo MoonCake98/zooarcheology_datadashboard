@@ -55,3 +55,7 @@ Once this is done the link to the dashboard can be found in your terminal output
 ```
 
 If clicking on the link isn't supported in your IDE then you will have to manually open a browser and navigate towards the adress provided in your terminal output by inputting the link into your addres bar in the format of http://localhost:xxxx/controller
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
