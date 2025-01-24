@@ -1,13 +1,13 @@
 # zooarcheology_dashboards
 
 ## intro
-This is a project for module 2.2.1 data dashboards. The purpose of this project is the creation and demonstration of a datadashboard.
+This is a project for module 2.2.1 data dashboards. The purpose of this project is the creation and demonstration of a data dashboard.
 
 The dataset I have chosen is a dataset related to zoo archeology from opencontext.org (more about the dataset and where to find it is in the logbook).
 
 ## requirements
 
-the tools displayed below have been used for the developement of this dashboard
+The tools displayed below have been used for the developement of this dashboard
 
 #### tools
 |name|version|
