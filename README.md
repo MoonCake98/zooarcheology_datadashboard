@@ -30,7 +30,7 @@ The tools displayed below have been used for the developement of this dashboard
 
 ## installation
 
-First off make sure the required tools are installed, specifically [python](https://www.python.org/downloads/) (version seen in tools) and [pip](https://pip.pypa.io/en/stable/installation/) (version seen in tools).
+First off, make sure the required tools are installed, specifically [python](https://www.python.org/downloads/) (version seen in tools) and [pip](https://pip.pypa.io/en/stable/installation/) (version seen in tools).
 
 Follow this up by cloning this repository by executing the command below in your terminal whilst being located in your desired directory.
 
@@ -38,18 +38,18 @@ Follow this up by cloning this repository by executing the command below in your
 git clone https://github.com/MoonCake98/zooarcheology_datadashboard.git
 ```
 
-Afterwards to install all the required python packages execute the following command in your terminal:
+Afterwards, to install all the required python packages execute the following command in your terminal:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Lastly you can run the dashboard by being located in the zooarcheology_datadashboard directory and executing the following command:
+Lastly, you can run the dashboard by being located in the zooarcheology_datadashboard directory and executing the following command:
 ```bash
 panel serve controller.py
 ```
 
-Once this is done the link to the dashboard can be found in your terminal output in the line that is structured like this:
+Once this is done, the link to the dashboard can be found in your terminal output in the line that is structured like this:
 ```bash
 2025-01-23 5:48:43,910 Bokeh app running at: http://localhost:xxxx/controller
 ```
